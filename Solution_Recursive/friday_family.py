@@ -5,7 +5,7 @@ def generate_random_groups(employee_list, output_list=[]):
 	Uses employees in employee_list to recursively create random groups
 	:param employee_list: list of employees who needs to become part of a group
 	:param output_list: list of employee groups, initial default value is an empty list
-	:return:
+	:return:a list with sub-list of employees
 	"""
 
 	# default size of each random group that will be created is 5
