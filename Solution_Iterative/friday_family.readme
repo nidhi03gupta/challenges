@@ -1,0 +1,19 @@
+# 1. Command to generate random groups of employee
+# In the following command, replace [inputfile] with local path to file that contains employee names
+
+python friday_family.py generate_random_groups [inputfile]
+
+#Example:
+
+python friday_family.py generate_random_groups /path/EmployeeListFile
+
+# 2. Command to add new employee to file that stores list of employee
+# In the following command, replace [inputfile] with local path to file that contains employee names and replace [employeeName] with new employee name
+
+python friday_family.py add_new_member [inputfile] [employeeName]
+
+#Example:
+
+python friday_family.py add_new_member /path/EmployeeListFile Nidhi
+
+
