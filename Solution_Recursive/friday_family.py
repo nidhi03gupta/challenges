@@ -1,12 +1,16 @@
 import sys, random
 
-def generate_random_groups(employee_list, output_list=[]):
+def generate_random_groups(employee_list, remove_employee_list=[], output_list=[]):
 	"""
 	Uses employees in employee_list to recursively create random groups
 	:param employee_list: list of employees who needs to become part of a group
 	:param output_list: list of employee groups, initial default value is an empty list
 	:return:a list with sub-list of employees
 	"""
+
+	if len(remove_employee_list) > 0:
+		employee_list = [item for item in employee_list if item not in remove_employee_list]
+		remove_employee_list = []
 
 	# default size of each random group that will be created is 5
 	random_list_size = 5
@@ -28,7 +32,7 @@ def generate_random_groups(employee_list, output_list=[]):
 
 	# if there are more than 5 employee in the updated_employee_list, then recursively call generate_random_groups
 	if len_updated_list > 5:
-		generate_random_groups(updated_employee_list, output_list)
+		generate_random_groups(updated_employee_list, remove_employee_list, output_list)
 
 	# if number of employees in updated_employee_list is between 0 and 5, then simply append those employees to output_list
 	elif len_updated_list > 0 and len_updated_list <= 5:
@@ -37,12 +41,15 @@ def generate_random_groups(employee_list, output_list=[]):
 	# return the final output_list
 	return output_list
 
-def read_input_file(inputfile):
+def read_input_file(inputfile, remove_employees=''):
 	"""
 	Reads the input file that contains all the employees in the company with one employee per line
 	:param inputfile: fully qualified path to input file
 	:type inputfile: string
 	"""
+
+	print remove_employees
+
 	employee_list = []
 	try:
 		# open and read the content of input file
@@ -59,10 +66,14 @@ def read_input_file(inputfile):
 		print "Unexpected error:", sys.exc_info()[0]
 		raise
 
+	remove_employee_list = remove_employees.split(',')
+
+	print remove_employee_list
+
 	# create employee groups only if there are more than 5 employee in the company
 	if len(employee_list) > 5:
 		# call generate_random_groups method that returns random groups
-		random_groups = generate_random_groups(employee_list)
+		random_groups = generate_random_groups(employee_list, remove_employee_list)
 		count = 1
 		for group in random_groups:
 			print 'Group' + str(count) + ':\n' + ''.join(group)
@@ -72,15 +83,24 @@ def read_input_file(inputfile):
 				print ('group size validation fails')
 				sys.exit()
 	else:
-		 print ('Total number of employee in company is less than 5. Distribution of employee into multiple groups will not be done.')
-		 print ('Below is the only group that can be created:')
-		 print ''.join(employee_list)
+		print employee_list
+		print remove_employee_list
+		new_employee_list=[]
+		for item in employee_list:
+			new_employee_list.append(item.strip('\n'))
+
+		if len(remove_employee_list) > 0:
+			employee_list = [item for item in new_employee_list if item not in remove_employee_list]
+
+		print ('Total number of employee in company is less than 5. Distribution of employee into multiple groups will not be done.')
+		print ('Below is the only group that can be created:')
+		print ''.join(employee_list)
 
 # Script execution starts below
 try:
 	# if first argument passed to python script is generate_random_groups then read_input_file method will be called
 	if (sys.argv[1] == 'generate_random_groups'):
-		read_input_file(sys.argv[2])
+		read_input_file(sys.argv[2], sys.argv[3])
 
 	# if first argument passed to python script is add_new_member then new employee will be appended to employee file
 	elif (sys.argv[1] == 'add_new_member'):
